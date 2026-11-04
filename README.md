@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StoryPerk
 
-## Getting Started
+Gost objavi Instagram story i označi lokal → dobije kupon u Instagram poruci → aktivira ga kad dođe na red i pokaže osoblju (važi 10 min).
 
-First, run the development server:
+## Pokretanje lokalno
 
 ```bash
+npm install
+cp .env.example .env.local   # pa i .env (drizzle-kit i seed čitaju .env)
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`npm run dev` sam podiže lokalni PostgreSQL na portu 5455 (folder `.pgdata/`, bez Docker-a),
+pri prvom pokretanju pravi tabele i demo podatke, pa pokreće Next.js.
+Umesto toga može i `docker compose up -d` (isti port i `DATABASE_URL`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Promena šeme: `npm run db:push` (dok `npm run dev` radi).
+- Vraćanje demo podataka: `npm run db:seed`.
+- Potpuno nova baza: zaustavi dev server i obriši `.pgdata/`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stranice
 
-## Learn More
+| Adresa | Ko | Šta |
+|---|---|---|
+| `/` | svi | landing |
+| `/l/[slug]` | gost (QR na stolu) | ponuda, uputstvo, uslovi |
+| `/k/[token]` | gost (link iz DM-a) | kupon: spreman → aktivan (tajmer) → istekao |
+| `/prijava` | lokal, admin | prijava kodom na e-mail (bez lozinke) |
+| `/panel` | vlasnik lokala | ponuda, uključi/isključi, rezultati, QR |
+| `/panel/qr` | vlasnik lokala | QR za štampu / PDF |
+| `/admin` | StoryPerk tim | lokali, status ugovora, novi lokal |
+| `/api/webhooks/instagram` | Meta | story mention webhook |
 
-To learn more about Next.js, take a look at the following resources:
+Demo nalozi posle seed-a: `vlasnik@lokal.rs` (panel), `admin@storyperk.rs` (admin).
+Bez `RESEND_API_KEY` kod za prijavu se ispisuje u konzoli servera.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Testiranje bez Instagrama
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Sa `ENABLE_DEV_TOOLS=true`, na dnu `/l/kafe-komsiluk` postoje dugmad
+„Objavio sam stori" (isti gost — proverava dnevni limit) i „…kao novi gost".
+Ona idu kroz istu logiku kao webhook, samo umesto DM-a odmah otvaraju kupon.
 
-## Deploy on Vercel
+## Pravila
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Jedan kupon dnevno po IG nalogu i lokalu; dan se menja u 00:00 (Europe/Belgrade). Čuva ga jedinstveni indeks u bazi.
+- Kupon se mora aktivirati do kraja dana izdavanja; posle aktiviranja važi `active_minutes` (10).
+- Izmena ponude ne menja već izdate kupone (nagrada se kopira u kupon).
+- Lokal radi samo dok je pretplata `trial`/`active` i nije prošao datum `subscription_until`. Naplata je van aplikacije, po ugovoru.
+- Story sadržaj se ne čuva (Meta pravila), samo CDN link.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Instagram (još nije testirano sa pravim Meta nalogom)
+
+1. Meta app (Business) → proizvod Instagram → „API setup with Instagram login".
+2. Webhook URL: `https://<domen>/api/webhooks/instagram`, verify token = `META_WEBHOOK_VERIFY_TOKEN`, polje `messages`.
+3. `META_APP_SECRET` za proveru potpisa.
+4. Lokalu u bazi upisati `ig_user_id` i `ig_access_token` (OAuth povezivanje iz panela je sledeći korak).
+5. Dok aplikacija nema Advanced Access, radi samo za naloge dodate kao Instagram testeri.

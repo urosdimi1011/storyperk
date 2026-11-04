@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Skoro sve stranice su dinamične (kupon, sesija, baza), pa Cache Components
+  // za sada isključujemo; uključićemo ga kad budemo keširali landing i statiku.
+  cacheComponents: false,
   turbopack: {
     rules: {
       "*.css": {
