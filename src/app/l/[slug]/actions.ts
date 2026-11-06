@@ -4,6 +4,7 @@ import { randomBytes } from "node:crypto";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { handleStoryMention } from "@/lib/instagram";
+import { devToolsEnabled } from "@/lib/dev-tools";
 import { getVenueBySlug } from "@/lib/venues";
 
 const DEV_GUEST = "sp_dev_guest";
@@ -13,7 +14,7 @@ const DEV_GUEST = "sp_dev_guest";
  * pa umesto DM-a odmah otvara kupon.
  */
 export async function simulateStory(slug: string, newGuest: boolean) {
-  if (process.env.ENABLE_DEV_TOOLS !== "true") notFound();
+  if (!devToolsEnabled()) notFound();
   const venue = await getVenueBySlug(slug);
   if (!venue) notFound();
 

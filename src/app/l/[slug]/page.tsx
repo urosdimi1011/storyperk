@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { GuestShell } from "@/components/guest-shell";
 import { InstagramIcon } from "@/components/brand";
 import { Notice, StatusIcon } from "@/components/ui";
+import { devToolsEnabled } from "@/lib/dev-tools";
 import { getOffer, getVenueBySlug, hasValidSubscription } from "@/lib/venues";
 import { OfferView, OfferTermsLink } from "./offer-view";
 
@@ -68,7 +69,7 @@ export default async function OfferPage({ params, searchParams }: PageProps<"/l/
         rewardTitle={offer.title}
         terms={offer.terms}
         minutes={offer.activeMinutes}
-        devTools={process.env.ENABLE_DEV_TOOLS === "true"}
+        devTools={devToolsEnabled()}
       />
     </GuestShell>
   );

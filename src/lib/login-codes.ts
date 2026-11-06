@@ -2,6 +2,7 @@ import "server-only";
 import { createHmac, randomInt, timingSafeEqual } from "node:crypto";
 import { and, desc, eq, gt, isNull } from "drizzle-orm";
 import { db, schema } from "@/db";
+import { devToolsEnabled } from "./dev-tools";
 import { sendEmail } from "./email";
 
 const CODE_TTL_MIN = 10;
@@ -36,8 +37,7 @@ export async function requestLoginCode(rawEmail: string): Promise<{ devCode?: st
     subject: `Tvoj StoryPerk kod: ${code}`,
     text: `Kod za prijavu na StoryPerk: ${code}\n\nKod važi ${CODE_TTL_MIN} minuta. Ako nisi tražio kod, ignoriši ovu poruku.`,
   });
-  const devTools = process.env.NODE_ENV !== "production" && process.env.ENABLE_DEV_TOOLS === "true";
-  return devTools ? { devCode: code } : {};
+  return devToolsEnabled() ? { devCode: code } : {};
 }
 
 /** Vraća korisnika ako je kod tačan, inače null. */

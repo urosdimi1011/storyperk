@@ -1,10 +1,15 @@
-/** Demo podaci: npm run db:seed (briše postojeće podatke!) */
-import "dotenv/config";
+/** Demo podaci: npm run db:seed (briše postojeće podatke!) — samo nad lokalnom bazom. */
+import { dbEnv } from "./env"; // mora prvi: učitava DATABASE_URL pre nego što ./index otvori konekciju
 import { randomBytes, randomInt } from "node:crypto";
 import { db, schema } from "./index";
 import { dayKey, nextBelgradeMidnight } from "../lib/time";
 
 async function main() {
+  const host = new URL(process.env.DATABASE_URL!).hostname;
+  if (dbEnv === "neon" || !["localhost", "127.0.0.1"].includes(host)) {
+    throw new Error(`Seed briše sve podatke, pa radi samo nad lokalnom bazom (DATABASE_URL pokazuje na ${host}).`);
+  }
+
   await db.delete(schema.coupons);
   await db.delete(schema.storyMentions);
   await db.delete(schema.offers);

@@ -15,6 +15,9 @@ pri prvom pokretanju pravi tabele i demo podatke, pa pokreće Next.js.
 Umesto toga može i `docker compose up -d` (isti port i `DATABASE_URL`).
 
 - Promena šeme: `npm run db:push` (dok `npm run dev` radi).
+- Neon (produkcija): `.env` puni `neon env pull` (`DATABASE_URL` pooled za aplikaciju, `DATABASE_URL_UNPOOLED` za migracije).
+  Šema na Neon: `npm run db:push:neon`. Lokalne komande uvek čitaju `.env.local`, a `db:seed` odbija da radi van localhost-a.
+- Vercel: u Environment Variables staviti `DATABASE_URL` (pooled) i `DATABASE_URL_UNPOOLED` iz Neon-a.
 - Vraćanje demo podataka: `npm run db:seed`.
 - Potpuno nova baza: zaustavi dev server i obriši `.pgdata/`.
 
