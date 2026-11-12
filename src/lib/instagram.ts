@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import type { Venue } from "@/db/schema";
-import { issueCoupon } from "./coupons";
+import { verifyFromMention } from "./coupons";
 
 /** Proverava X-Hub-Signature-256 ("sha256=<hex>") nad sirovim telom zahteva. */
 export function verifySignature(rawBody: string, header: string | null): boolean {
@@ -50,70 +50,44 @@ export function extractStoryMentions(payload: WebhookPayload) {
 
 export type StoryMention = ReturnType<typeof extractStoryMentions>[number];
 
-const appUrl = () => process.env.APP_URL ?? "http://localhost:3000";
+/**
+ * Webhook šalje samo Instagram-scoped ID gosta, a gost na stranici unosi korisničko ime.
+ * Ime dobijamo preko User Profile API-ja (traži instagram_business_manage_messages).
+ */
+async function fetchUsername(venue: Venue, guestIgId: string): Promise<string | null> {
+  if (!venue.igAccessToken) return null;
+  const version = process.env.META_GRAPH_VERSION ?? "v23.0";
+  const res = await fetch(`https://graph.instagram.com/${version}/${guestIgId}?fields=username`, {
+    headers: { Authorization: `Bearer ${venue.igAccessToken}` },
+  });
+  if (!res.ok) throw new Error(`Instagram profile ${res.status}: ${await res.text()}`);
+  const data = (await res.json()) as { username?: string };
+  return data.username?.toLowerCase() ?? null;
+}
 
 /**
- * Obrada jednog story mention-a: upis, izdavanje kupona i DM gostu.
+ * Obrada jednog story mention-a: upis i potvrda nagrade gosta koji je uneo taj nalog.
+ * `username` šalje samo dev simulacija; u produkciji ga čitamo sa Instagrama.
  * Vraća null ako je isti događaj već obrađen.
  */
-export async function handleStoryMention(venue: Venue, m: Omit<StoryMention, "venueIgId">) {
+export async function handleStoryMention(
+  venue: Venue,
+  m: Omit<StoryMention, "venueIgId"> & { username?: string },
+) {
+  const username = m.username ?? (await fetchUsername(venue, m.guestIgId));
   const [inserted] = await db
     .insert(schema.storyMentions)
-    .values({
-      venueId: venue.id,
-      guestIgId: m.guestIgId,
-      messageId: m.messageId,
-      storyUrl: m.storyUrl,
-    })
+    .values({ venueId: venue.id, guestIgId: m.guestIgId, username, messageId: m.messageId, storyUrl: m.storyUrl })
     .onConflictDoNothing()
     .returning();
   if (!inserted) return null;
-
-  const result = await issueCoupon(venue, m.guestIgId);
-  if (result.kind === "issued") {
-    await sendDirectMessage(
-      venue,
-      m.guestIgId,
-      `Hvala na story-ju! Tvoj kupon za „${result.coupon.rewardTitle}" je spreman. ` +
-        `Aktiviraj ga tek kad dođeš na red: ${appUrl()}/k/${result.coupon.token}`,
-    );
-  } else if (result.kind === "daily_limit") {
-    await sendDirectMessage(
-      venue,
-      m.guestIgId,
-      `Današnji kupon je već izdat. Novi možeš dobiti sutra, od 00:00. ` +
-        `Tvoj današnji kupon: ${appUrl()}/k/${result.coupon.token}`,
-    );
-  }
-  return result;
+  // Ako gost još nije uneo nalog, startClaim će naći ovaj mention kad ga unese.
+  return username ? ((await verifyFromMention(venue.id, username, m.guestIgId)) ?? "stored") : "stored";
 }
 
 export async function processWebhook(payload: WebhookPayload) {
   for (const m of extractStoryMentions(payload)) {
-    const venue = await db.query.venues.findFirst({
-      where: eq(schema.venues.igUserId, m.venueIgId),
-    });
+    const venue = await db.query.venues.findFirst({ where: eq(schema.venues.igUserId, m.venueIgId) });
     if (venue) await handleStoryMention(venue, m);
   }
-}
-
-/**
- * Slanje DM-a preko Instagram API with Instagram Login.
- * Story mention otvara 24h prozor u kome lokal sme da odgovori.
- */
-async function sendDirectMessage(venue: Venue, recipientId: string, text: string) {
-  if (!venue.igAccessToken || !venue.igUserId) {
-    console.log(`[instagram] (bez tokena) DM za ${recipientId}: ${text}`);
-    return;
-  }
-  const version = process.env.META_GRAPH_VERSION ?? "v23.0";
-  const res = await fetch(`https://graph.instagram.com/${version}/${venue.igUserId}/messages`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${venue.igAccessToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ recipient: { id: recipientId }, message: { text } }),
-  });
-  if (!res.ok) throw new Error(`Instagram send ${res.status}: ${await res.text()}`);
 }

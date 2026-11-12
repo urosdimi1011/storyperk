@@ -1,7 +1,7 @@
 import "server-only";
 import QRCode from "qrcode";
 
-export const offerUrl = (slug: string) => `${process.env.APP_URL ?? "http://localhost:3000"}/l/${slug}`;
+export const offerUrl = (slug: string) => `${process.env.APP_URL ?? "http://localhost:3000"}/${slug}`;
 
 /** QR ostaje isti i kad se promeni nagrada — vodi na stalnu adresu lokala. */
 export function qrSvg(slug: string) {

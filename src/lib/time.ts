@@ -18,6 +18,14 @@ function offsetMinutes(date: Date): number {
   return (m[1] === "-" ? -1 : 1) * (Number(m[2]) * 60 + Number(m[3]));
 }
 
+/** Trenutak "danas u HH:MM" po beogradskom vremenu, npr. kraj važenja nagrade u 22:00. */
+export function belgradeTimeToday(hhmm: string, now: Date = new Date()): Date {
+  const [y, mo, d] = dayKey(now).split("-").map(Number);
+  const [h, mi] = hhmm.split(":").map(Number);
+  const guess = new Date(Date.UTC(y, mo - 1, d, h, mi));
+  return new Date(guess.getTime() - offsetMinutes(guess) * 60_000);
+}
+
 /** Trenutak sledeće ponoći u Beogradu — tada se resetuje dnevni limit. */
 export function nextBelgradeMidnight(date: Date = new Date()): Date {
   const [y, mo, d] = dayKey(date).split("-").map(Number);

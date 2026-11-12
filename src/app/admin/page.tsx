@@ -53,7 +53,7 @@ export default async function AdminPage() {
               <input type="hidden" name="venueId" value={venue.id} />
               <div>
                 <div className="flex items-center gap-2">
-                  <a href={`/l/${venue.slug}`} className="font-display text-lg font-bold hover:underline">
+                  <a href={`/${venue.slug}`} className="font-display text-lg font-bold hover:underline">
                     {venue.name}
                   </a>
                   <Chip tone={hasValidSubscription(venue) ? "ok" : "notice"}>

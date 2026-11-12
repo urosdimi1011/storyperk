@@ -2,7 +2,7 @@
 import { dbEnv } from "./env"; // mora prvi: učitava DATABASE_URL pre nego što ./index otvori konekciju
 import { randomBytes, randomInt } from "node:crypto";
 import { db, schema } from "./index";
-import { dayKey, nextBelgradeMidnight } from "../lib/time";
+import { belgradeTimeToday, dayKey } from "../lib/time";
 
 async function main() {
   const host = new URL(process.env.DATABASE_URL!).hostname;
@@ -24,9 +24,9 @@ async function main() {
   const [venue] = await db
     .insert(schema.venues)
     .values({
-      slug: "kafe-komsiluk",
-      name: "Kafe Komšiluk",
-      igUsername: "kafe_komsiluk",
+      slug: "kafic-primer",
+      name: "Kafić Primer",
+      igUsername: "kafic_primer",
       subscriptionStatus: "active",
       subscriptionUntil: dayKey(until),
       contractNote: "Demo lokal",
@@ -35,7 +35,7 @@ async function main() {
 
   const [offer] = await db
     .insert(schema.offers)
-    .values({ venueId: venue.id, title: "20% popusta", terms: "Na ceo račun, osim pića na akciji." })
+    .values({ venueId: venue.id, title: "Limunada na poklon", terms: "Jedna limunada uz porudžbinu." })
     .returning();
 
   await db.insert(schema.users).values([
@@ -47,17 +47,20 @@ async function main() {
   for (let i = 0; i < 48; i++) {
     const at = new Date(Date.now() - randomInt(1, 30) * 86_400_000 - randomInt(0, 36_000_000));
     const guest = `seed-${i}`;
+    const handle = `gost_${i}`;
     await db.insert(schema.storyMentions).values({
       venueId: venue.id,
       guestIgId: guest,
+      username: handle,
       messageId: `seed-mid-${i}`,
       receivedAt: at,
     });
-    if (i % 8 === 7) continue; // ponekad kupon nije izdat (npr. dnevni limit)
+    if (i % 8 === 7) continue; // ponekad gost nije uneo nalog na stranici
     const activated = i % 3 !== 0;
     await db.insert(schema.coupons).values({
       venueId: venue.id,
       offerId: offer.id,
+      guestHandle: handle,
       guestIgId: guest,
       token: randomBytes(18).toString("base64url"),
       code: String(randomInt(100000, 1000000)),
@@ -66,7 +69,9 @@ async function main() {
       activeMinutes: 10,
       dayKey: dayKey(at),
       issuedAt: at,
-      activateBy: nextBelgradeMidnight(at),
+      activateBy: belgradeTimeToday(offer.validUntil, at),
+      verifiedAt: new Date(at.getTime() + 60_000),
+      verifiedVia: "mention",
       activatedAt: activated ? new Date(at.getTime() + 20 * 60_000) : null,
       expiresAt: activated ? new Date(at.getTime() + 30 * 60_000) : null,
     });

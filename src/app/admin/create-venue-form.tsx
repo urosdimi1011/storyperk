@@ -16,7 +16,7 @@ export function CreateVenueForm() {
         <input name="name" required placeholder="Kafe Komšiluk" className={input} />
       </label>
       <label className="block">
-        Adresa ponude (/l/…)
+        Adresa lokala (storyperk.rs/…)
         <input name="slug" required placeholder="kafe-komsiluk" className={input} />
       </label>
       <label className="block">

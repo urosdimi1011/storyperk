@@ -63,7 +63,12 @@ export const offers = pgTable("offers", {
   title: text("title").notNull(),
   terms: text("terms").notNull().default(""),
   isActive: boolean("is_active").notNull().default(true),
+  /** Koliko dugo gost pokazuje ekran osoblju posle "Preuzmi sada". */
   activeMinutes: integer("active_minutes").notNull().default(10),
+  /** Do kada danas važi nagrada (HH:MM, beogradsko vreme) — "Važi danas do 22:00". */
+  validUntil: text("valid_until").notNull().default("22:00"),
+  /** Najviše nagrada dnevno za ceo lokal; null = bez ograničenja. */
+  dailyLimit: integer("daily_limit"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
@@ -83,6 +88,8 @@ export const storyMentions = pgTable("story_mentions", {
     .references(() => venues.id, { onDelete: "cascade" }),
   /** Instagram-scoped ID gosta (sender.id). */
   guestIgId: text("guest_ig_id").notNull(),
+  /** Korisničko ime gosta (malim slovima) — po njemu se story uparuje sa nagradom. */
+  username: text("username"),
   /** message.mid — štiti od duple obrade istog događaja. */
   messageId: text("message_id").notNull().unique(),
   /** CDN link story-ja. Sam sadržaj ne smemo da čuvamo (Meta pravila). */
@@ -90,6 +97,10 @@ export const storyMentions = pgTable("story_mentions", {
   receivedAt: timestamp("received_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+/**
+ * Nagrada gosta za jedan dan u jednom lokalu. Nastaje kad gost unese svoj nalog (čeka proveru),
+ * potvrđuje se kad stigne story mention ili link story-ja, a "preuzima" pred osobljem.
+ */
 export const coupons = pgTable(
   "coupons",
   {
@@ -100,7 +111,10 @@ export const coupons = pgTable(
     offerId: uuid("offer_id")
       .notNull()
       .references(() => offers.id, { onDelete: "cascade" }),
-    guestIgId: text("guest_ig_id").notNull(),
+    /** Instagram nalog koji je gost uneo (malim slovima, bez @). */
+    guestHandle: text("guest_handle").notNull(),
+    /** Instagram-scoped ID, poznat tek kad stigne webhook. */
+    guestIgId: text("guest_ig_id"),
     token: text("token").notNull().unique(),
     code: text("code").notNull(),
     /** Kopija nagrade u trenutku izdavanja — izmena ponude ne menja izdate kupone. */
@@ -110,11 +124,19 @@ export const coupons = pgTable(
     /** Dan izdavanja po beogradskom vremenu (YYYY-MM-DD) — za dnevni limit. */
     dayKey: text("day_key").notNull(),
     issuedAt: timestamp("issued_at", { withTimezone: true }).notNull().defaultNow(),
+    /** Kraj važenja nagrade danas (offer.validUntil). */
     activateBy: timestamp("activate_by", { withTimezone: true }).notNull(),
+    /** Story potvrđen — automatski (mention) ili linkom story-ja (link). */
+    verifiedAt: timestamp("verified_at", { withTimezone: true }),
+    verifiedVia: text("verified_via"),
+    storyLink: text("story_link"),
+    /** "Sačuvaj za kasnije" — adresa samo za tu jednu poruku. */
+    email: text("email"),
+    /** "Preuzmi sada" — od tada ekran za osoblje važi activeMinutes. */
     activatedAt: timestamp("activated_at", { withTimezone: true }),
     expiresAt: timestamp("expires_at", { withTimezone: true }),
   },
-  (t) => [uniqueIndex("coupons_daily_limit").on(t.venueId, t.guestIgId, t.dayKey)],
+  (t) => [uniqueIndex("coupons_daily_limit").on(t.venueId, t.guestHandle, t.dayKey)],
 );
 
 export const leadStatus = pgEnum("lead_status", ["new", "contacted", "converted", "rejected"]);

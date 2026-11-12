@@ -1,15 +1,18 @@
 import type { Coupon } from "@/db/schema";
+import { couponState } from "@/lib/coupons";
+import { formatDate, formatTime } from "@/lib/time";
 
-/** Podaci kupona koje sme da vidi gost (bez ID-jeva naloga). */
+/** Ono što gost i osoblje vide o nagradi (bez Instagram ID-ja i e-maila). */
 export function serializeCoupon(c: Coupon) {
   return {
     token: c.token,
-    code: c.code,
+    state: couponState(c),
+    handle: c.guestHandle,
     rewardTitle: c.rewardTitle,
-    rewardTerms: c.rewardTerms,
-    activeMinutes: c.activeMinutes,
-    activateBy: c.activateBy.toISOString(),
+    validUntil: formatTime(c.activateBy),
+    verifiedVia: c.verifiedVia,
     activatedAt: c.activatedAt?.toISOString() ?? null,
+    activatedDate: c.activatedAt ? formatDate(c.activatedAt) : null,
     expiresAt: c.expiresAt?.toISOString() ?? null,
     serverNow: new Date().toISOString(),
   };

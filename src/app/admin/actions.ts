@@ -9,13 +9,17 @@ import { requireSession } from "@/lib/session";
 
 export type AdminFormState = { ok?: boolean; error?: string };
 
+/** Lokal živi na storyperk.rs/<adresa>, pa adresa ne sme da bude ime postojeće stranice. */
+const RESERVED_SLUGS = new Set(["admin", "panel", "prijava", "privatnost", "uslovi", "api", "k", "l", "images", "portal"]);
+
 const venueSchema = z.object({
   name: z.string().trim().min(2, "Unesi naziv lokala."),
   slug: z
     .string()
     .trim()
     .toLowerCase()
-    .regex(/^[a-z0-9-]{3,40}$/, "Adresa: 3–40 malih slova, brojeva ili crtica."),
+    .regex(/^[a-z0-9-]{3,40}$/, "Adresa: 3–40 malih slova, brojeva ili crtica.")
+    .refine((s) => !RESERVED_SLUGS.has(s), "Ta adresa je zauzeta stranicom sajta."),
   igUsername: z
     .string()
     .trim()
