@@ -24,7 +24,7 @@ export function LeadForm() {
           </svg>
         </span>
         <h3 className="mt-5 text-[28px]">Hvala! Javljamo vam se.</h3>
-        <p className="mt-2 max-w-[320px] text-[14px] text-secondary">
+        <p className="mt-2 max-w-[320px] text-[16px] text-secondary">
           Kontaktiraćemo vas u toku jednog radnog dana i zajedno podesiti nagradu i QR kod.
         </p>
       </div>
@@ -37,7 +37,7 @@ export function LeadForm() {
         {FIELDS.map((f) => {
           const error = state.errors?.[f.name];
           return (
-            <label key={f.name} className={`block text-[12px] ${f.wide ? "sm:col-span-2" : ""}`}>
+            <label key={f.name} className={`block text-[14px] ${f.wide ? "sm:col-span-2" : ""}`}>
               {f.label}
               <input
                 name={f.name}
@@ -46,22 +46,22 @@ export function LeadForm() {
                 placeholder={f.placeholder}
                 defaultValue={state.values?.[f.name]}
                 aria-invalid={!!error}
-                className={`mt-1.5 h-12 w-full rounded-full border bg-surface px-5 text-[15px] outline-none placeholder:text-placeholder focus:border-primary ${
+                className={`mt-1.5 h-12 w-full rounded-full border bg-surface px-5 text-[17px] outline-none placeholder:text-placeholder focus:border-primary ${
                   error ? "border-accent" : "border-primary/70"
                 }`}
               />
-              {error && <span className="mt-1 block pl-4 text-[12px] text-accent">{error}</span>}
+              {error && <span className="mt-1 block pl-4 text-[14px] text-accent">{error}</span>}
             </label>
           );
         })}
       </div>
       {/* zamka za botove, ljudi je ne vide */}
       <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
-      {state.error && <p className="mt-4 text-[13px] text-accent">{state.error}</p>}
+      {state.error && <p className="mt-4 text-[15px] text-accent">{state.error}</p>}
       <PillButton tone="brand" block disabled={pending} className="mt-6">
         {pending ? "Šaljem…" : "Probajte besplatno"}
       </PillButton>
-      <p className="mt-3 text-center text-[12px] text-secondary">Prvi mesec besplatno · Bez ugovora</p>
+      <p className="mt-3 text-center text-[14px] text-secondary">Prvi mesec besplatno · Bez ugovora</p>
     </form>
   );
 }

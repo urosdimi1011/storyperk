@@ -1,7 +1,8 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/site/header";
-import { StoryCard, StoryPhone, StoryTop } from "@/components/site/story";
+import { StoryBand, StoryFan } from "@/components/site/hero-stories";
+import { StoryCard, StoryTop } from "@/components/site/story";
 import { CheckCircle, Panel, PillLink, Tag } from "@/components/site/ui";
 import { LeadForm } from "./lead-form";
 
@@ -45,55 +46,46 @@ export default function Home() {
 
 function Hero() {
   return (
-    <Panel id="za-lokale" tone="inverse" className="relative -mt-[84px] overflow-hidden px-5 pt-[132px] md:-mt-[88px] md:px-10 md:pt-[150px]">
-      {/* tamni oblici u pozadini, kao uvećane story kartice */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute top-[44%] left-[-6%] h-[520px] w-[400px] -rotate-[14deg] rounded-[48px] bg-inverse-shape md:left-[18%]" />
-        <div className="absolute top-[28%] right-[-10%] h-[600px] w-[420px] rotate-[12deg] rounded-[48px] bg-inverse-shape md:right-[14%]" />
-      </div>
-
-      <div className="relative mx-auto max-w-[760px] text-center">
-        <Tag tone="outlineInverse" className="px-4 py-1.5 text-[13px] md:text-[12px]">
-          Za restorane i kafiće
-        </Tag>
-        <h1 className="mt-6 text-[44px] leading-[1.08] text-white md:text-[64px] md:leading-[1.1]">
-          Budite lokal kog se ljudi prvo sete.
+    <Panel
+      id="za-lokale"
+      tone="inverse"
+      className="relative -mt-[84px] flex min-h-[calc(100svh-24px)] flex-col overflow-hidden pt-[104px] md:-mt-[88px] md:block md:min-h-0 md:pt-[150px]"
+    >
+      <div className="relative z-10 px-4 md:mx-auto md:max-w-[880px] md:px-10 md:text-center">
+        <h1 className="text-[42px] leading-[1.08] text-white md:text-[64px] lg:text-[72px]">
+          Budite lokal kog se ljudi <span className="text-brand">prvo sete.</span>
         </h1>
-        <p className="mx-auto mt-5 max-w-[520px] text-[17px] leading-relaxed text-inverse-muted md:text-[16px]">
+        <p className="mt-4 max-w-[600px] text-[18px] leading-relaxed text-inverse-muted md:mx-auto md:mt-5 md:text-[20px]">
           Gost objavi Story i označi vaš lokal. Dobije nagradu koju vi birate.
         </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <PillLink href="#prijava-lokala" tone="brand" size="lg" className="md:h-12 md:text-[15px]">
+        <div className="mt-8 hidden justify-center gap-3 md:flex">
+          <PillLink href="#prijava-lokala" tone="brand" size="lg">
             Probajte besplatno
           </PillLink>
-          <PillLink href="#kako-radi" tone="control" size="lg" className="md:h-12 md:text-[15px]">
+          <PillLink href="#kako-radi" tone="control" size="lg">
             Kako radi
           </PillLink>
         </div>
       </div>
 
-      {/* Raspored iz Figme: telefon u sredini, donja ivica ploče ga odseca; kartice levo niže, desno više. */}
-      <div className="relative mx-auto mt-14 h-[300px] max-w-[1060px] md:mt-12 md:h-[350px]">
-        <StoryPhone className="absolute top-0 left-1/2 w-[210px] -translate-x-1/2" />
-
-        <figure className="absolute top-[75px] left-[calc(50%-585px)] hidden h-[210px] w-[210px] lg:block">
-          <div className="relative h-full overflow-hidden rounded-[20px]">
-            <Image src="/images/kafa-ruke.jpg" alt="Gost fotografiše kafu u kafiću" fill sizes="210px" className="object-cover" />
-          </div>
-          <figcaption className="absolute -top-10 -right-10 flex h-[100px] w-[100px] items-center justify-center rounded-[18px] bg-peach text-[16px] text-primary">
-            gost objavi
-          </figcaption>
-        </figure>
-
-        <figure className="absolute top-[5px] left-[calc(50%+375px)] hidden h-[210px] w-[215px] lg:block">
-          <div className="relative h-full overflow-hidden rounded-[20px]">
-            <Image src="/images/drustvo.jpg" alt="Društvo za stolom u restoranu" fill sizes="215px" className="object-cover" />
-          </div>
-          <figcaption className="absolute -top-10 -right-11 flex h-[100px] w-[100px] items-center justify-center rounded-[18px] bg-lavender text-[16px] text-primary">
-            društvo vidi
-          </figcaption>
-        </figure>
+      {/* Telefon: kosa traka Storyja preko cele širine, dugme dole na dohvat palca. */}
+      <div className="relative min-h-[240px] flex-1 md:hidden">
+        <StoryBand />
       </div>
+      <div className="relative z-10 bg-gradient-to-t from-inverse via-inverse to-transparent px-4 pt-8 pb-6 md:hidden">
+        <PillLink href="#prijava-lokala" tone="brand" size="lg" block>
+          Probajte besplatno
+        </PillLink>
+        <a href="#kako-radi" className="mt-3 block py-1 text-center text-[16px] text-white underline underline-offset-4">
+          Kako radi
+        </a>
+      </div>
+
+      {/* Tablet i desktop: lepeza Storyja ispod naslova, ploča je odseca dole. */}
+      <div className="relative mt-14 hidden md:block">
+        <StoryFan />
+      </div>
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-20 hidden h-32 bg-gradient-to-t from-inverse to-transparent md:block" />
     </Panel>
   );
 }
@@ -108,7 +100,7 @@ function Remember() {
             <Image src="/images/vecera-sto.jpg" alt="Večera sa prijateljima" fill sizes="(min-width: 768px) 460px, 90vw" className="object-cover" />
           </div>
           <figcaption className="absolute right-[-4%] bottom-0 rounded-[20px] bg-lavender px-5 pt-3 pb-4 md:right-[-12%]">
-            <Tag tone="outline" className="text-[11px]">
+            <Tag tone="outline" className="text-[13px]">
               Poznato pitanje
             </Tag>
             <p className="mt-2 text-[24px] leading-tight">„Gde ćemo večeras?“</p>
@@ -118,7 +110,7 @@ function Remember() {
           <p className="text-[24px] leading-snug md:text-[26px]">
             Petak je. Društvo se dogovara gde će izaći. Želite da neko predloži baš vaš lokal.
           </p>
-          <p className="mt-4 text-[15px] text-secondary">Važno je da vas se sete kad biraju gde će na večeru ili piće.</p>
+          <p className="mt-4 text-[17px] text-secondary">Važno je da vas se sete kad biraju gde će na večeru ili piće.</p>
         </div>
       </div>
     </section>
@@ -141,7 +133,7 @@ function Trust() {
             </Tag>
           </div>
           <h3 className="mt-5 text-[30px] md:text-[26px]">Lokal se reklamira</h3>
-          <p className="mt-2 text-[16px] leading-relaxed text-secondary md:text-[15px]">
+          <p className="mt-2 text-[18px] leading-relaxed text-secondary md:text-[17px]">
             Ljudi su prezasićeni reklamama. Bilborde i oglase vide svakog dana. Još jednu takvu poruku lako preskoče.
           </p>
         </article>
@@ -154,12 +146,12 @@ function Trust() {
             </Tag>
           </div>
           <h3 className="mt-5 text-[30px] md:text-[26px]">Neko kome verujemo</h3>
-          <p className="mt-2 text-[16px] leading-relaxed text-secondary md:text-[15px]">
+          <p className="mt-2 text-[18px] leading-relaxed text-secondary md:text-[17px]">
             Vidimo gde je bio i kako se proveo. Njegova preporuka nam znači jer ga poznajemo i verujemo mu.
           </p>
         </article>
       </div>
-      <p className="mt-6 text-center text-[14px]">StoryPerk nagrađuje goste koji podele svoje iskustvo. Nagradu birate vi.</p>
+      <p className="mt-6 text-center text-[16px]">StoryPerk nagrađuje goste koji podele svoje iskustvo. Nagradu birate vi.</p>
     </section>
   );
 }
@@ -187,11 +179,11 @@ function FromOneGuest() {
               </span>
             )}
             <h3 className="mt-4 text-[24px] md:text-[22px]">{s.t}</h3>
-            <p className="mt-1 text-[15px] text-secondary md:text-[13px]">{s.d}</p>
+            <p className="mt-1 text-[17px] text-secondary md:text-[15px]">{s.d}</p>
           </li>
         ))}
       </ol>
-      <p className="mt-8 text-[15px] font-medium md:text-[13px]">Tako za vaš lokal čuju ljudi koji veruju osobi koja ga preporučuje.</p>
+      <p className="mt-8 text-[17px] font-medium md:text-[15px]">Tako za vaš lokal čuju ljudi koji veruju osobi koja ga preporučuje.</p>
     </Panel>
   );
 }
@@ -206,7 +198,7 @@ function Rewards() {
       <div>
         <Tag>Nagrade</Tag>
         <h2 className="mt-4 text-[40px] leading-tight md:text-[44px]">Vi birate nagradu.</h2>
-        <p className="mt-3 max-w-[440px] text-[16px] leading-relaxed text-secondary md:text-[15px]">
+        <p className="mt-3 max-w-[440px] text-[18px] leading-relaxed text-secondary md:text-[17px]">
           Odaberite šta želite da ponudite gostima za njihovu objavu. To može da bude mafin, limunada ili kafa. Vi određujete
           uslove. Ponudu možete da promenite ili isključite.
         </p>
@@ -220,7 +212,7 @@ function Rewards() {
         <PillLink href="#prijava-lokala" tone="control" className="mt-6">
           Probajte besplatno
         </PillLink>
-        <p className="mt-4 text-[12px] text-secondary">Prikazane nagrade su primer. Nagradu i uslove određuje vaš lokal.</p>
+        <p className="mt-4 text-[14px] text-secondary">Prikazane nagrade su primer. Nagradu i uslove određuje vaš lokal.</p>
       </div>
       <div className="grid grid-cols-2 gap-3 md:gap-4">
         {examples.map((e) => (
@@ -228,9 +220,9 @@ function Rewards() {
             <div className="relative aspect-[1/0.85] overflow-hidden rounded-[16px]">
               <Image src={e.src} alt={e.alt} fill sizes="(min-width: 768px) 260px, 45vw" className="object-cover" />
             </div>
-            <p className="mt-3 px-2 text-[12px] text-secondary">Primer nagrade</p>
+            <p className="mt-3 px-2 text-[14px] text-secondary">Primer nagrade</p>
             <h3 className="px-2 text-[20px] leading-tight md:text-[22px]">{e.t}</h3>
-            <p className="mt-1 px-2 text-[13px] text-secondary">Za objavljen Story iz vašeg lokala.</p>
+            <p className="mt-1 px-2 text-[15px] text-secondary">Za objavljen Story iz vašeg lokala.</p>
           </article>
         ))}
       </div>
@@ -262,12 +254,12 @@ function NewOffer() {
             </Tag>
             <div className="absolute right-5 bottom-5 left-5 text-white">
               <h3 className="text-[26px] leading-tight md:text-[28px]">{b.t}</h3>
-              <p className="mt-1 text-[14px] text-white/85">{b.d}</p>
+              <p className="mt-1 text-[16px] text-white/85">{b.d}</p>
             </div>
           </article>
         ))}
       </div>
-      <p className="mt-5 text-center text-[14px]">Isto važi za salone, teretane, pekare i male prodavnice.</p>
+      <p className="mt-5 text-center text-[16px]">Isto važi za salone, teretane, pekare i male prodavnice.</p>
       <div className="mx-auto mt-5 grid max-w-[1060px] grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
         {small.map((s) => (
           <article key={s.tag} className="relative aspect-[4/3.1] overflow-hidden rounded-[20px]">
@@ -278,7 +270,7 @@ function NewOffer() {
           </article>
         ))}
       </div>
-      <p className="mt-5 text-center text-[12px] text-secondary">Primeri mogućih ponuda. Nagradu i uslove bira lokal.</p>
+      <p className="mt-5 text-center text-[14px] text-secondary">Primeri mogućih ponuda. Nagradu i uslove bira lokal.</p>
     </section>
   );
 }
@@ -299,11 +291,11 @@ function SeenRemembered() {
               <Image src={it.src} alt={it.alt} fill sizes="(min-width: 768px) 30vw, 90vw" className="object-cover" />
             </div>
             <h3 className="mt-4 text-[22px] text-white md:text-[20px]">{it.t}</h3>
-            <p className="mt-1 text-[14px] text-inverse-muted md:text-[12px]">{it.d}</p>
+            <p className="mt-1 text-[16px] text-inverse-muted md:text-[14px]">{it.d}</p>
           </article>
         ))}
       </div>
-      <p className="mt-8 text-[14px] text-inverse-muted md:text-[12px]">Objave gostiju podsećaju druge na vaš lokal i ono što nudite.</p>
+      <p className="mt-8 text-[16px] text-inverse-muted md:text-[14px]">Objave gostiju podsećaju druge na vaš lokal i ono što nudite.</p>
       <PillLink href="#prijava-lokala" tone="brand" className="mt-6">
         Probajte besplatno
       </PillLink>
@@ -345,10 +337,10 @@ function HowItWorks() {
       top: <StoryTop name="storyperk" avatar={null} active={1} />,
       layer: (
         <div className="absolute inset-x-3 top-1/2 -translate-y-1/2 rounded-2xl bg-white p-3 text-primary shadow-lg">
-          <div className="flex items-center justify-between text-[12px]">
-            StoryPerk provera <Tag tone="brand" className="text-[10px]">automatski</Tag>
+          <div className="flex items-center justify-between text-[14px]">
+            StoryPerk provera <Tag tone="brand" className="text-[12px]">automatski</Tag>
           </div>
-          <ul className="mt-2 space-y-2 text-[13px]">
+          <ul className="mt-2 space-y-2 text-[15px]">
             {["Story je objavljen", "Lokal je označen", "Nagrada je aktivna"].map((x) => (
               <li key={x} className="flex items-center gap-2">
                 <CheckCircle className="h-6 w-6" /> {x}
@@ -374,7 +366,7 @@ function HowItWorks() {
         <div>
           <Tag>Kako radi</Tag>
           <h2 className="mt-4 text-[36px] leading-tight md:text-[40px]">Kako gost dobija nagradu.</h2>
-          <p className="mt-2 text-[15px] text-secondary md:text-[14px]">Četiri koraka. Bez aplikacije.</p>
+          <p className="mt-2 text-[17px] text-secondary md:text-[16px]">Četiri koraka. Bez aplikacije.</p>
         </div>
         <span className="hidden md:block">
           <PillLink href="#prijava-lokala" tone="control">
@@ -390,7 +382,7 @@ function HowItWorks() {
             </StoryCard>
             <div className="mt-3 flex items-start gap-3">
               <span
-                className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-[12px] ${
+                className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-[14px] ${
                   s.n === "03" ? "bg-brand" : "border border-primary/60"
                 }`}
               >
@@ -398,7 +390,7 @@ function HowItWorks() {
               </span>
               <div>
                 <h3 className="text-[19px] leading-tight">{s.t}</h3>
-                <p className="mt-0.5 text-[13px] text-secondary">{s.d}</p>
+                <p className="mt-0.5 text-[15px] text-secondary">{s.d}</p>
               </div>
             </div>
           </li>
@@ -453,17 +445,17 @@ function Pricing() {
               <span className="text-[80px] leading-[0.9] text-brand md:text-[72px]">0 €</span>
               <span className="pb-1 text-[18px]">prvi mesec</span>
             </p>
-            <p className="mt-4 text-[14px] text-inverse-muted">Posle toga 30 € mesečno ili 5.000 RSD.</p>
+            <p className="mt-4 text-[16px] text-inverse-muted">Posle toga 30 € mesečno ili 5.000 RSD.</p>
             <PillLink href="#prijava-lokala" tone="brand" block className="mt-14">
               Probajte besplatno
             </PillLink>
           </div>
         </div>
         <div className="rounded-[24px] bg-surface p-6 md:p-7">
-          <p className="text-[11px] tracking-[0.12em] text-secondary uppercase">Šta dobijate</p>
+          <p className="text-[13px] tracking-[0.12em] text-secondary uppercase">Šta dobijate</p>
           <ul className="mt-3 divide-y divide-subtle/70">
             {items.map((i) => (
-              <li key={i} className="flex items-center gap-4 py-3.5 text-[17px] md:text-[16px]">
+              <li key={i} className="flex items-center gap-4 py-3.5 text-[17px] md:text-[18px]">
                 <CheckCircle /> {i}
               </li>
             ))}
@@ -471,11 +463,11 @@ function Pricing() {
         </div>
       </div>
 
-      <p className="mt-8 text-[13px]">Ovako izgleda vaš dashboard</p>
+      <p className="mt-8 text-[15px]">Ovako izgleda vaš dashboard</p>
       <div className="mt-3 grid gap-4 md:grid-cols-3">
         <div className="rounded-[22px] bg-surface p-5">
           <p className="text-[18px]">Storyja po danima</p>
-          <p className="text-[12px] text-secondary">primer</p>
+          <p className="text-[14px] text-secondary">primer</p>
           <div className="mt-4 flex h-[110px] items-end gap-2.5" aria-hidden>
             {bars.map((b, i) => (
               <div key={i} className="flex h-full flex-1 flex-col justify-end">
@@ -483,7 +475,7 @@ function Pricing() {
               </div>
             ))}
           </div>
-          <div className="mt-2 flex gap-2.5 text-center text-[10px] text-secondary" aria-hidden>
+          <div className="mt-2 flex gap-2.5 text-center text-[12px] text-secondary" aria-hidden>
             {bars.map((b, i) => (
               <span key={i} className="flex-1">
                 {b.d}
@@ -493,11 +485,11 @@ function Pricing() {
         </div>
         <div className="flex flex-col justify-center rounded-[22px] bg-pink p-6">
           <p className="text-[44px] leading-none">128</p>
-          <p className="mt-2 text-[12px] text-secondary">Storyja ovog meseca · primer</p>
+          <p className="mt-2 text-[14px] text-secondary">Storyja ovog meseca · primer</p>
         </div>
         <div className="flex flex-col justify-center rounded-[22px] bg-control p-6 text-white">
           <p className="text-[44px] leading-none">96</p>
-          <p className="mt-2 text-[12px] text-inverse-muted">Izdatih nagrada · primer</p>
+          <p className="mt-2 text-[14px] text-inverse-muted">Izdatih nagrada · primer</p>
         </div>
       </div>
     </Panel>
@@ -518,7 +510,7 @@ function Faq() {
                 <span className="hidden group-open:inline">−</span>
               </span>
             </summary>
-            <p className="mt-3 pr-12 text-[14px] leading-relaxed text-secondary">{f.a}</p>
+            <p className="mt-3 pr-12 text-[16px] leading-relaxed text-secondary">{f.a}</p>
           </details>
         ))}
       </div>
@@ -539,7 +531,7 @@ function LeadSection() {
           Neka sledeći Story bude <br className="hidden md:block" />
           iz vašeg lokala.
         </h2>
-        <p className="mt-4 text-[15px] text-secondary md:text-[14px]">Ostavite podatke. Javljamo vam se i podešavamo sve zajedno.</p>
+        <p className="mt-4 text-[17px] text-secondary md:text-[16px]">Ostavite podatke. Javljamo vam se i podešavamo sve zajedno.</p>
         <div className="relative mt-8 h-[170px] max-w-[360px]" aria-hidden>
           {photos.map((p) => (
             <div key={p.src} className={`absolute h-[150px] w-[46%] overflow-hidden rounded-[22px] border-[3px] border-white shadow-md ${p.cls}`}>

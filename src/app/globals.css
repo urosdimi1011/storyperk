@@ -100,3 +100,44 @@ dialog::backdrop {
     transform: translate(-50%, 8px);
   }
 }
+
+/* Hero "Zid Storyja": kartice izranjaju odozdo, nagrada iskoči, traka na telefonu se vrti. */
+@keyframes story-rise {
+  from {
+    opacity: 0;
+    transform: translateY(180px);
+  }
+}
+
+@keyframes reward-pop {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.6);
+  }
+}
+
+@keyframes story-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.story-rise {
+  animation: story-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.reward-pop {
+  animation: reward-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s both;
+}
+
+.story-marquee {
+  animation: story-marquee 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-rise,
+  .reward-pop,
+  .story-marquee {
+    animation: none;
+  }
+}

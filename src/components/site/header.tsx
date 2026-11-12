@@ -46,7 +46,7 @@ export function SiteHeader({ home = true }: { home?: boolean }) {
             <a
               key={n.id}
               href={href(n.href)}
-              className={`rounded-full px-4 py-2 text-[14px] transition-colors ${
+              className={`rounded-full px-4 py-2 text-[16px] transition-colors ${
                 home && active === n.id ? "bg-brand text-primary" : "text-white hover:text-brand"
               }`}
             >
@@ -56,7 +56,7 @@ export function SiteHeader({ home = true }: { home?: boolean }) {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <Link href="/prijava" className="hidden text-[14px] text-white hover:text-brand lg:inline">
+          <Link href="/prijava" className="hidden text-[16px] text-white hover:text-brand lg:inline">
             Prijava
           </Link>
           {/* omotači nose vidljivost: "hidden" na samom dugmetu bi pregazio njegov inline-flex */}
@@ -66,7 +66,7 @@ export function SiteHeader({ home = true }: { home?: boolean }) {
             </PillLink>
           </span>
           <span className="lg:hidden">
-            <PillLink href={href("#prijava-lokala")} tone="brand" size="sm" className="px-4 text-[13px] whitespace-nowrap sm:px-5 sm:text-[14px]">
+            <PillLink href={href("#prijava-lokala")} tone="brand" size="sm" className="!px-3.5 !text-[15px] whitespace-nowrap min-[380px]:!px-4 sm:!px-5 sm:!text-[16px]">
               Probajte besplatno
             </PillLink>
           </span>

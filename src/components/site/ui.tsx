@@ -8,7 +8,7 @@ const pill = {
   inverse: "bg-inverse text-white hover:bg-inverse-raised",
   outline: "border border-primary/80 text-primary hover:bg-white/60",
 };
-const pillSize = { md: "h-12 px-7 text-[16px]", sm: "h-10 px-5 text-[14px]", lg: "h-14 px-8 text-[17px]" };
+const pillSize = { md: "h-12 px-7 text-[18px]", sm: "h-10 px-5 text-[16px]", lg: "h-14 px-8 text-[19px]" };
 
 type PillProps = { tone?: keyof typeof pill; size?: keyof typeof pillSize; block?: boolean };
 
@@ -34,7 +34,7 @@ const tags = {
 
 export function Tag({ tone = "outline", children, className = "" }: { tone?: keyof typeof tags; children: ReactNode; className?: string }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-3 py-1 text-[12px] leading-4 font-medium ${tags[tone]} ${className}`}>
+    <span className={`inline-flex items-center rounded-full px-3 py-1 text-[14px] leading-4 font-medium ${tags[tone]} ${className}`}>
       {children}
     </span>
   );
