@@ -117,6 +117,21 @@ export const coupons = pgTable(
   (t) => [uniqueIndex("coupons_daily_limit").on(t.venueId, t.guestIgId, t.dayKey)],
 );
 
+export const leadStatus = pgEnum("lead_status", ["new", "contacted", "converted", "rejected"]);
+
+/** Prijave lokala sa sajta ("Probajte besplatno"). StoryPerk se javlja i ručno otvara lokal. */
+export const leads = pgTable("leads", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  fullName: text("full_name").notNull(),
+  phone: text("phone").notNull(),
+  venueName: text("venue_name").notNull(),
+  instagram: text("instagram").notNull(),
+  email: text("email").notNull(),
+  status: leadStatus("status").notNull().default("new"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type Lead = typeof leads.$inferSelect;
 export type Venue = typeof venues.$inferSelect;
 export type Offer = typeof offers.$inferSelect;
 export type Coupon = typeof coupons.$inferSelect;

@@ -54,6 +54,18 @@ export async function createVenue(_: AdminFormState, form: FormData): Promise<Ad
   return { ok: true };
 }
 
+const leadStatusSchema = z.object({
+  leadId: z.string().uuid(),
+  status: z.enum(["new", "contacted", "converted", "rejected"]),
+});
+
+export async function updateLeadStatus(form: FormData) {
+  await requireSession("admin");
+  const d = leadStatusSchema.parse(Object.fromEntries(form));
+  await db.update(schema.leads).set({ status: d.status }).where(eq(schema.leads.id, d.leadId));
+  revalidatePath("/admin");
+}
+
 const subscriptionSchema = z.object({
   venueId: z.string().uuid(),
   status: z.enum(["trial", "active", "expired", "suspended"]),

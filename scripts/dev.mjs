@@ -50,12 +50,55 @@ const ourPid = () => {
   }
 };
 
+/** Da li baza zaista odgovara na upit (ne samo da je port otvoren). */
+async function healthy() {
+  const client = pg.getPgClient();
+  client.connectionTimeoutMillis = 4000;
+  try {
+    await client.connect();
+    await client.query("select 1");
+    return true;
+  } catch {
+    return false;
+  } finally {
+    await client.end().catch(() => {});
+  }
+}
+
+/**
+ * Kad se dev server naglo ugasi, na Windows-u ponekad ostane pomoćni postgres.exe koji drži port,
+ * a glavni proces više ne postoji. Gasimo samo procese iz našeg node_modules/@embedded-postgres.
+ */
+function killLeftovers() {
+  if (process.platform !== "win32") return;
+  spawnSync(
+    "powershell",
+    [
+      "-NoProfile",
+      "-Command",
+      "Get-CimInstance Win32_Process -Filter \"Name='postgres.exe'\" | Where-Object { $_.CommandLine -like '*@embedded-postgres*' -and $_.CommandLine -like '*" +
+        process.cwd().replaceAll("\\", "/").split("/").pop() +
+        "*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }",
+    ],
+    { stdio: "ignore" },
+  );
+}
+
 if (await isListening()) {
   if (!ourPid()) {
     console.error(`[db] Port ${PORT} je zauzet nekim drugim programom. Promeni PORT u scripts/dev.mjs i DATABASE_URL.`);
     process.exit(1);
   }
-  console.log(`[db] StoryPerk PostgreSQL već radi na portu ${PORT}.`);
+  if (await healthy()) {
+    console.log(`[db] StoryPerk PostgreSQL već radi na portu ${PORT}.`);
+  } else {
+    console.log("[db] Zaostali Postgres proces ne odgovara — gasim ga i pokrećem bazu ponovo.");
+    killLeftovers();
+    await new Promise((r) => setTimeout(r, 1500));
+    await pg.start();
+    startedHere = true;
+    console.log(`[db] PostgreSQL pokrenut na portu ${PORT}.`);
+  }
 } else {
   if (needsInit) await pg.initialise();
   await pg.start();
@@ -70,6 +113,9 @@ if (!existsSync(SEEDED)) {
   await run("npx drizzle-kit push --force");
   await run("npx tsx src/db/seed.ts");
   writeFileSync(SEEDED, new Date().toISOString());
+} else {
+  // Nove tabele/kolone iz src/db/schema.ts (npr. posle git pull) odmah stižu i u lokalnu bazu.
+  await run("npx drizzle-kit push --force");
 }
 
 const next = spawn("npx next dev", { stdio: "inherit", shell: true });

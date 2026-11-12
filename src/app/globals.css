@@ -1,6 +1,34 @@
 @import "tailwindcss";
 
-/* Tokeni iz Figme (Brend i komponente). */
+/* Dizajn sistem (K) — "StoryPerk — sajt", stranica "Dizajn sistem (K) / Osnove". */
+@theme {
+  --color-page: #eef5e5;
+  --color-surface: #ffffff;
+  --color-inverse: #0a0a0a;
+  --color-inverse-raised: #1d1d1f;
+  --color-inverse-shape: #151517;
+  --color-brand: #cbfe63;
+  --color-brand-muted: #b5ee49;
+  --color-control: #2f3b55;
+  --color-lavender: #dddcfb;
+  --color-pink: #fcc6e8;
+  --color-peach: #fce3c5;
+  --color-primary: #0a0a0a;
+  --color-secondary: #3f3f49;
+  --color-inverse-muted: #b9b9c3;
+  --color-accent: #d8306e;
+  --color-placeholder: #787878;
+  --color-subtle: #cecece;
+
+  --font-urbanist: var(--font-urbanist-src), ui-sans-serif, system-ui, sans-serif;
+  --font-logo: var(--font-logo-src), var(--font-urbanist-src), sans-serif;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-panel: 2rem;
+}
+
+/* Stari tokeni (prvi dizajn) — koriste ih ekrani gosta i panel dok ne pređu na dizajn sistem K. */
 @theme {
   --color-cream: #f6f4ef;
   --color-ink: #1b1d25;
@@ -36,6 +64,21 @@ h3,
 .font-display {
   font-family: var(--font-display);
   letter-spacing: -0.02em;
+}
+
+/* Sajt (dizajn sistem K): Urbanist svuda, i u naslovima. */
+.site {
+  background: var(--color-page);
+  color: var(--color-primary);
+  font-family: var(--font-urbanist);
+}
+.site :is(h1, h2, h3, h4) {
+  font-family: var(--font-urbanist);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+html {
+  scroll-behavior: smooth;
 }
 
 dialog::backdrop {
