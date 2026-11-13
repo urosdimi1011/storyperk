@@ -2,17 +2,16 @@ import Link from "next/link";
 
 /**
  * Logotip STORYPERK: debela zaobljena slova (Lilita One), a "O" je Story prsten.
- * Prsten ima prekid u kom "kruži" tačka (nova priča), a u sredini je iskra (perk / nagrada).
+ * U sredini prstena je četvorokraka iskra (perk / nagrada).
  */
 export function SiteLogo({ className = "text-[28px]", tone = "brand" }: { className?: string; tone?: "brand" | "dark" }) {
   const color = tone === "brand" ? "text-brand" : "text-primary";
   return (
-    <span className={`inline-flex items-center font-logo leading-none tracking-[0.01em] ${color} ${className}`}>
+    <span className={`inline-flex items-center font-logo leading-none tracking-[0.02em] ${color} ${className}`}>
       ST
       <svg viewBox="0 0 24 24" className="mx-[0.02em] h-[0.78em] w-[0.78em]" aria-hidden>
-        <path d="M12.75 3.43A8.6 8.6 0 1 0 20.57 11.25" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-        <circle cx="18.08" cy="5.92" r="2.1" fill="currentColor" />
-        <path d="M12 7.8Q12.5 11.5 16.2 12 12.5 12.5 12 16.2 11.5 12.5 7.8 12 11.5 11.5 12 7.8Z" fill="currentColor" />
+        <circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" strokeWidth="5" />
+        <path d="M12 7.4Q12.6 11.4 16.6 12 12.6 12.6 12 16.6 11.4 12.6 7.4 12 11.4 11.4 12 7.4Z" fill="currentColor" />
       </svg>
       RYPERK
     </span>
