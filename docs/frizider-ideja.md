@@ -41,6 +41,19 @@ Dizajn za ideje iz frižidera je u Figmi, na stranici „↳ Arhiva (stari ekran
   - Šta ako gost dođe pre isteka 24 h?
 - **Figma:** [A9 sa najavom](https://www.figma.com/design/49Yn8xIhKitChYtC1py2H7/Storyperk?node-id=167-12794) · [N1 · Opet ti](https://www.figma.com/design/49Yn8xIhKitChYtC1py2H7/Storyperk?node-id=167-13384)
 
+### 3. Koliko često isti gost dobija poklon
+
+- **Ideja:** lokal bira da li isti gost dobija poklon jednom dnevno (kao sada), jednom nedeljno ili jednom mesečno.
+- **Zašto:** u testu sa vlasnikom lokala (19. 11. 2026.) prvo pitanje je bilo „može li isti gost svaki dan da uzme limunadu?“. Lokalima sa stalnim gostima dnevni poklon može da bude preskup.
+- **Šta traži:**
+  - u panelu: novi red u podešavanjima poklona „Isti gost“ i panel odozdo sa tri izbora;
+  - u toku gosta: ekran „Nagradu za danas već imaš“ dobija varijante za nedelju i mesec, sa datumom kad gost opet može;
+  - backend: brojanje poklona po gostu za izabrani period.
+- **Otvorena pitanja:**
+  - Da li se period računa od poslednjeg poklona ili od početka nedelje/meseca?
+  - Šta vidi gost koji je poklon dobio u drugom lokalu?
+- **Figma:** još nema ekrana.
+
 ---
 
 ## Ušlo u proizvod
