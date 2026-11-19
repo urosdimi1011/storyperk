@@ -68,6 +68,24 @@ Dizajn za ideje iz frižidera je u Figmi, na stranici „↳ Arhiva (stari ekran
   - Backend treba da potvrdi da imamo dozvolu za User Profile API.
 - **Figma:** još nema ekrana.
 
+### 5. Zid Storyja uz saglasnost gosta
+
+- **Ideja:** lokal ima zid sa Storyjima gostiju koji ostaju i posle 24 sata, i može da ih preuzme i koristi u svojim objavama. Uzor je „Story Wall“ iz ShoutOut reference.
+- **Zašto:** lokal dobija sadržaj za svoje objave, a ne samo Story koji nestane za dan.
+- **Zašto ne može ovako kako je sad:** kad nas gost označi, Instagram nam šalje samo link do slike. Meta dozvoljava da čuvamo link, ali ne i samu sliku, a link prestaje da radi kad Story istekne ili ga gost obriše. Meta to proverava pri odobravanju aplikacije: Chatwootu je aplikacija odbijena baš zbog toga.
+  - [cm.com: Instagram Messaging Inbound](https://developers.cm.com/messaging/docs/instagram-messaging-inbound)
+  - [Meta forum: CDN URLs by not storing/caching media content](https://developers.facebook.com/community/threads/293297973468494/)
+  - [Chatwoot issue #8583](https://github.com/chatwoot/chatwoot/issues/8583)
+- **Jedini čist put:** sliku nam daje gost, ne Instagram.
+  - u toku gosta: gost na našoj stranici izabere ili snimi sliku i čekira „[business name] sme da koristi ovu sliku“; telefon je zatim podeli na Instagram (Web Share API), a gost objavi Story i označi lokal;
+  - backend: čuvamo sliku koju je gost poslao, uz zapis saglasnosti (ko, kada, za koji lokal);
+  - u panelu: ekran „Zid Storyja“ sa preuzimanjem slike i oznakom ko je dao saglasnost.
+- **Otvorena pitanja:**
+  - Da li Instagram sliku iz pregledača (Web Share API) otvara kao Story ili kao objavu? Treba probati na iPhone-u i Androidu pre bilo kakvog obećanja.
+  - Da li dodatni korak (izbor slike na našoj stranici) smanjuje broj gostiju koji objave?
+  - Tekst saglasnosti i rok čuvanja po ZZPL-u. Lokal koristi lične podatke i lik gosta.
+- **Figma:** još nema ekrana. Tekst na sajtu „Story traje 24 sata. Na vašem zidu ostaje.“ je zamenjen (19. 11. 2026.) tekstom koji obećava samo prikaz dok Story traje.
+
 ---
 
 ## Ušlo u proizvod
