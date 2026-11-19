@@ -26,21 +26,6 @@ Dizajn za ideje iz frižidera je u Figmi, na stranici „↳ Arhiva (stari ekran
   - Da li animacija otvaranja ide u MVP+1 ili kasnije?
 - **Figma:** [A2](https://www.figma.com/design/49Yn8xIhKitChYtC1py2H7/Storyperk?node-id=167-9714) · [Poklon je stigao](https://www.figma.com/design/49Yn8xIhKitChYtC1py2H7/Storyperk?node-id=167-10334) · [Poklon otvoren](https://www.figma.com/design/49Yn8xIhKitChYtC1py2H7/Storyperk?node-id=167-10953)
 
-### 2. Bonus za Story koji ostane 24 h
-
-- **Ideja:** ako gost ne obriše Story ceo dan, sledeći put kad skenira QR čeka ga bonus uz novi poklon.
-- **Zašto:**
-  - Ništa ne sprečava gosta da obriše Story čim uzme poklon. Bonus to rešava bez kazne.
-  - U X10 oceni ovo diže Oštricu (ideja traje i posle prvog poklona) i Istinu.
-- **Šta traži:**
-  - na A9 jedan red: „Ostavi Story 24 h i sledeći put te čeka bonus.“;
-  - nov ekran N1 u stilu OB1: „Opet ti! Bonus te čeka“;
-  - u portalu lokala: podešavanje `[bonus reward]`.
-- **Otvorena pitanja:**
-  - Da li backend može da proveri da je Story i dalje objavljen posle 24 h? Instagram javlja kad je lokal označen, ali da li javlja i kad se Story obriše, treba proveriti pre nego što ovo obećamo.
-  - Šta ako gost dođe pre isteka 24 h?
-- **Figma:** [A9 sa najavom](https://www.figma.com/design/49Yn8xIhKitChYtC1py2H7/Storyperk?node-id=167-12794) · [N1 · Opet ti](https://www.figma.com/design/49Yn8xIhKitChYtC1py2H7/Storyperk?node-id=167-13384)
-
 ### 3. Koliko često isti gost dobija poklon
 
 - **Ideja:** lokal bira da li isti gost dobija poklon jednom dnevno (kao sada), jednom nedeljno ili jednom mesečno.
@@ -86,6 +71,37 @@ Dizajn za ideje iz frižidera je u Figmi, na stranici „↳ Arhiva (stari ekran
   - Tekst saglasnosti i rok čuvanja po ZZPL-u. Lokal koristi lične podatke i lik gosta.
 - **Figma:** još nema ekrana. Tekst na sajtu „Story traje 24 sata. Na vašem zidu ostaje.“ je zamenjen (19. 11. 2026.) tekstom koji obećava samo prikaz dok Story traje.
 
+### 6. Minimum pratilaca za poklon
+
+- **Ideja:** gost sa premalo pratilaca (na primer manje od 50) ne dobija poklon. Tako se lokal štiti od lažnih naloga.
+- **Zašto:** produkt menadžer u debati (19. 11. 2026.) kaže da lažni nalozi uzimaju poklone, a lokal plaća.
+- **Zašto nije u MVP-u:**
+  - vlasnik lokala ne želi skriveno pravilo („stalna gošća od 60 godina ima 30 pratilaca“);
+  - broj pratilaca ne znamo uvek, jer nije potvrđeno da story mention daje pravo na User Profile API.
+- **Šta traži:** podešavanje koje lokal vidi i menja, red u uputstvu za osoblje i objašnjenje u toku gosta.
+- **Otvorena pitanja:** šta kad je broj pratilaca nepoznat (predlog: poklon se ipak daje, a štiti ga dnevni limit). U MVP-u je umesto ovoga dugme „Blokiraj gosta“ na Detalju gosta.
+
+### 7. Koliko te košta poklon
+
+- **Ideja:** neobavezno polje na stranici Poklon za cenu poklona. Panel i izveštaj onda pišu „Ovog meseca pokloni su te koštali [amount]“.
+- **Zašto:** vlasniku je to broj na osnovu kog odlučuje da li ostaje posle probnog perioda.
+- **Šta traži:** polje na D4, red na Pregledu, red u nedeljnom izveštaju i u mejlu pred prvu naplatu.
+
+### 8. Kartica „Tvoj prvi mesec“ na Pregledu
+
+- **Ideja:** u poslednjih 7 dana probnog perioda Pregled pokazuje sažetak: Storyji, pratioci gostiju, pokloni.
+- **Zašto:** lokal treba da vidi šta je dobio pre prve naplate. U MVP-u taj sažetak ide samo u mejl E9.
+
+### 9. Slika telefona na stranici sa cenom
+
+- **Ideja:** na A1 slika telefona gosta sa poklonom i satom koji teče, plus česta pitanja „Šta ako gost obriše Story?“ i „Koliko me košta?“.
+- **Zašto:** to su glavne sumnje pre „Počni besplatno“.
+
+### 10. Prethodne posete gosta
+
+- **Ideja:** na Detalju gosta lista ranijih poseta sa datumima.
+- **Zašto nije u MVP-u:** čuvanje istorije poseta traži definisan rok čuvanja po ZZPL-u, a za MVP je dovoljan broj poseta („3. poseta“).
+
 ---
 
 ## Ušlo u proizvod
@@ -96,6 +112,7 @@ Još ništa.
 
 ## Odbačeno
 
+- **Bonus za Story koji ostane 24 h** (19. 11. 2026.): ideja je bila da gost koji ne obriše Story dobije bonus sledeći put. Odbačeno, jer Instagram ne javlja kad je Story obrisan, a link do slike prestaje da radi i kad Story istekne i kad ga gost obriše. Ne možemo da razlikujemo jedno od drugog, pa bonus ne smemo da obećamo.
 - **Story na TV-u u lokalu** (19. 11. 2026.): gostov Story se vrti na ekranu kod šanka. Odbačeno, jer ne povezujemo lokal sa ekranima i ideja ne služi gostu.
 
 ---
