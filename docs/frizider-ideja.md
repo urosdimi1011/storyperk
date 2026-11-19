@@ -54,6 +54,20 @@ Dizajn za ideje iz frižidera je u Figmi, na stranici „↳ Arhiva (stari ekran
   - Šta vidi gost koji je poklon dobio u drugom lokalu?
 - **Figma:** još nema ekrana.
 
+### 4. Veći poklon za veće profile
+
+- **Ideja:** svi gosti dobijaju osnovni poklon (na primer limunadu), a gost sa više od izabranog broja pratilaca (na primer 10.000) dobija veći poklon (na primer kolač). Jedan prag, jedan veći poklon.
+- **Zašto:** Story gosta sa mnogo pratilaca vredi lokalu više, pa lokal može da ga nagradi više.
+- **Šta traži:**
+  - u panelu, na stranici Poklon: deo „Veći poklon za veće profile“ (prekidač, prag pratilaca, naziv većeg poklona);
+  - u toku gosta: na početku se vide oba poklona („Limunada, ili kolač ako imaš 10.000+ pratilaca“), a ekran sa poklonom kaže koji je gost dobio;
+  - backend: kad stigne Story, uzimamo `follower_count` preko Instagram User Profile API-ja (isti podatak koji već prikazujemo u panelu) i biramo poklon.
+- **Otvorena pitanja:**
+  - Broj pratilaca znamo tek kad Story stigne, ne kad gost skenira kod. Da li je to u redu za gosta?
+  - Kako da se zaštitimo od kupljenih pratilaca (razuman prag, ili i `is_verified_user`)?
+  - Backend treba da potvrdi da imamo dozvolu za User Profile API.
+- **Figma:** još nema ekrana.
+
 ---
 
 ## Ušlo u proizvod
